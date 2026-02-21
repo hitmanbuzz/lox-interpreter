@@ -29,7 +29,7 @@ func (l *Lexer) Tokenize(char string, currIdx uint, str string) uint {
 	}
 
 	nextChar := string(str[currIdx+1])
-	lex, kind, kindValue, jump := l.MatchToken(char, nextChar)
+	lex, kind, kindValue, jump := l.MatchToken(currIdx, char, nextChar, str)
 	if kind != token.NULL {
 		nt.Lex = lex
 		nt.Kind = kind
@@ -56,7 +56,7 @@ func (l *Lexer) Tokenize(char string, currIdx uint, str string) uint {
 //
 // The 3rd return value is the number of indices to skip from the current char.
 // Default is always 1
-func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string, uint) {
+func (l *Lexer) MatchToken(currIdx uint, c, nc, str string) (string, token.TokenType, string, uint) {
 	switch c {
 	// skip if it is whitespace
 	case " ":
@@ -86,7 +86,7 @@ func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string
 		if nc == "=" {
 			return "!=", token.BANG_EQUAL, "BANG_EQUAL", 2
 		}
-		return "", token.NULL, "", 1
+		return c, token.BANG, "BANG", 1
 	case ">":
 		if nc == "=" {
 			return ">=", token.GREATER_EQUAL, "GREATER_EQUAL", 2
@@ -104,6 +104,21 @@ func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string
 	case ";":
 		return c, token.SEMI_COLON, "SEMI_COLON", 1
 	case "/":
+		// skip until new line is found
+		if nc == "/" {
+			skipCount := 0
+			idx := currIdx
+			for {
+				s := string(str[idx])
+				if s == "\n" {
+					break
+				}
+				idx++
+				skipCount++
+			}
+
+			return "", token.NULL, "", uint(skipCount)
+		}
 		return c, token.SLASH, "SLASH", 1
 	case "*":
 		return c, token.STAR, "STAR", 1
