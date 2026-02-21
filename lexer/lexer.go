@@ -22,40 +22,40 @@ func NewLexer() *Lexer {
 
 func (l *Lexer) Tokenize(char string, currIdx uint, str string) uint {
 	nt := token.Token{
-		Prev: token.TokenData{
-			Kind:      token.NULL,
-			KindValue: "",
-			Lex:       "",
-			Literal:   "null",
-		},
-		Curr: token.TokenData{
-			Kind:      token.NULL,
-			KindValue: "",
-			Lex:       "",
-			Literal:   "null",
-		},
-	}
-
-	if currIdx >= 1 {
-		prevChar := string(str[currIdx-1])
-		pLex, pKind, pKindValue, _ := l.MatchToken(prevChar, "")
-		nt.Prev.Lex = pLex
-		nt.Prev.Kind = pKind
-		nt.Prev.KindValue = pKindValue
+		Kind:      token.NULL,
+		KindValue: "",
+		Lex:       "",
+		Literal:   "null",
 	}
 
 	nextChar := string(str[currIdx+1])
 	lex, kind, kindValue, jump := l.MatchToken(char, nextChar)
 	if kind != token.NULL {
-		nt.Curr.Lex = lex
-		nt.Curr.Kind = kind
-		nt.Curr.KindValue = kindValue
+		nt.Lex = lex
+		nt.Kind = kind
+		nt.KindValue = kindValue
 		l.tokens = append(l.tokens, nt)
 	}
 
 	return jump
 }
 
+// @param:
+//
+// c -> current char
+//
+// nc -> next char
+//
+// @return
+//
+// 1st (string) -> lex
+//
+// 2nd (TokenType) -> TokenType
+//
+// 3rd (uint) -> Jump Amount
+//
+// The 3rd return value is the number of indices to skip from the current char.
+// Default is always 1
 func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string, uint) {
 	switch c {
 	// skip if it is whitespace
@@ -66,7 +66,7 @@ func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string
 		l.lineNo += 1
 		return c, token.NULL, "", 1
 	case "(":
-		return c, token.LEFT_PAREN, "LEFT_PAREM", 1
+		return c, token.LEFT_PAREN, "LEFT_PAREN", 1
 	case ")":
 		return c, token.RIGHT_PAREN, "RIGHT_PAREN", 1
 	case "{":
@@ -82,6 +82,21 @@ func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string
 			return "==", token.EQUAL_EQUAL, "EQUAL_EQUAL", 2
 		}
 		return c, token.EQUAL, "EQUAL", 1
+	case "!":
+		if nc == "=" {
+			return "!=", token.BANG_EQUAL, "BANG_EQUAL", 2
+		}
+		return "", token.NULL, "", 1
+	case ">":
+		if nc == "=" {
+			return ">=", token.GREATER_EQUAL, "GREATER_EQUAL", 2
+		}
+		return ">", token.GREATER, "GREATER", 1
+	case "<":
+		if nc == "=" {
+			return "<=", token.LESS_EQUAL, "LESS_EQUAL", 2
+		}
+		return "<", token.LESS, "LESS", 1
 	case "+":
 		return c, token.PLUS, "PLUS", 1
 	case "-":
@@ -101,7 +116,7 @@ func (l *Lexer) MatchToken(c string, nc string) (string, token.TokenType, string
 
 func (l *Lexer) Display() {
 	for _, t := range l.tokens {
-		fmt.Printf("%s %s %s\n", t.Curr.KindValue, t.Curr.Lex, t.Curr.Literal)
+		fmt.Printf("%s %s %s\n", t.KindValue, t.Lex, t.Literal)
 	}
 
 	fmt.Println("EOF  null")

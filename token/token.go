@@ -15,18 +15,18 @@ const (
 	MINUS
 	EQUAL
 	EQUAL_EQUAL
+	BANG_EQUAL
+	LESS_EQUAL
+	GREATER_EQUAL
+	LESS
+	GREATER
 	SLASH
 	NULL
 )
 
-type TokenData struct {
+type Token struct {
 	Kind      TokenType
 	KindValue string
 	Lex       string
 	Literal   string
-}
-
-type Token struct {
-	Prev TokenData
-	Curr TokenData
 }
