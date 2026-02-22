@@ -25,20 +25,13 @@ func NewLexer() *Lexer {
 
 func (l *Lexer) Tokenize() int {
 	nextByte := l.Source[l.CurrIdx+1]
-	l.MatchToken(l.CurrIdx, l.peek(), nextByte, l.Source)
+	l.MatchToken(nextByte)
 	return l.CurrIdx
 }
 
-// @return
-//
-// 1st -> TokenKind
-//
-// 2nd  -> Lex
-//
-// 3rd  -> Literal
-//
-// The 4th return value is the number of indices to skip from the current char.
-func (l *Lexer) MatchToken(currIdx int, currByte byte, nextByte byte, source string) {
+func (l *Lexer) MatchToken(nextByte byte) {
+	currByte := l.peek()
+
 	switch currByte {
 	case ' ':
 		l.AddToken(token.SPACE, utils.ToByteArr(currByte), "<SPACE>")
@@ -140,6 +133,7 @@ func (l *Lexer) scanString() bool {
 	return isString
 }
 
+// Get the current index value (which is in byte)
 func (l *Lexer) peek() byte {
 	if l.isAtEnd() {
 		return 0
@@ -148,6 +142,7 @@ func (l *Lexer) peek() byte {
 	return l.Source[l.CurrIdx]
 }
 
+// Increment the current index by the passed parameter value
 func (l *Lexer) advance(num int) {
 	if l.CurrIdx+num > len(l.Source) {
 		panic(fmt.Sprintf("cannot advance by `%d` due to index out of range", num))
@@ -156,6 +151,7 @@ func (l *Lexer) advance(num int) {
 	}
 }
 
+// Check if it reach the end of the source code/file
 func (l *Lexer) isAtEnd() bool {
 	return l.CurrIdx >= len(l.Source)
 }
@@ -181,6 +177,7 @@ func (l *Lexer) scanComment() {
 	}
 }
 
+// Add new token based on the given parameters data
 func (l *Lexer) AddToken(kind token.TokenKind, lex []byte, literal string) {
 	l.tokens = append(l.tokens, token.Token{
 		Kind:    kind,
@@ -189,6 +186,7 @@ func (l *Lexer) AddToken(kind token.TokenKind, lex []byte, literal string) {
 	})
 }
 
+// Printing out all tokens with ther kind, lex & literal
 func (l *Lexer) Display() {
 	for _, t := range l.tokens {
 		fmt.Printf("%s %s %s\n", t.Kind, t.Lex, t.Literal)
