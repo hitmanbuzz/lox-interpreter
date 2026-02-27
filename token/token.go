@@ -3,9 +3,28 @@ package token
 type TokenKind string
 
 // keywords for the lox language
-var Keywords []string = []string{}
+var Keywords = []string{"and", "class", "else", "false", "for", "fun", "if", "nil", "or", "print", "return", "super", "this", "true", "var", "while"}
 
 const (
+	// KEYWORDS
+	AND    TokenKind = "AND"
+	CLASS  TokenKind = "CLASS"
+	ELSE   TokenKind = "ELSE"
+	FALSE  TokenKind = "FALSE"
+	FOR    TokenKind = "FOR"
+	FUN    TokenKind = "FUN"
+	IF     TokenKind = "IF"
+	NIL    TokenKind = "NIL"
+	OR     TokenKind = "OR"
+	PRINT  TokenKind = "PRINT"
+	RETURN TokenKind = "RETURN"
+	SUPER  TokenKind = "SUPER"
+	THIS   TokenKind = "THIS"
+	TRUE   TokenKind = "TRUE"
+	VAR    TokenKind = "VAR"
+	WHILE  TokenKind = "WHILE"
+
+	// Literals, String, Number, Symbols, Espace Seq
 	IDENTIFIER      TokenKind = "IDENTIFIER"
 	LEFT_PAREN      TokenKind = "LEFT_PAREN"
 	RIGHT_PAREN     TokenKind = "RIGHT_PAREN"
@@ -32,7 +51,6 @@ const (
 	TAB             TokenKind = "TAB"
 	CARRIAGE_RETURN TokenKind = "CARRIAGE_RETURN"
 	SPACE           TokenKind = "SPACE"
-	NULL            TokenKind = "NULL"
 )
 
 type Token struct {

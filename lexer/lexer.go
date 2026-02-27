@@ -42,11 +42,45 @@ func (l *Lexer) MatchToken(nextByte byte) {
 	// check if the byte is a identifier
 	if utils.IsIden(l.peek()) {
 		iden, isIden := l.scanIdentifier()
+		// matching keyword and add it as token
 		if !isIden {
-			fmt.Printf("Unkown Identifier: %s\n", string(iden))
-			l.ExitCode = 65
+			keyword := string(iden)
+			switch keyword {
+			case "and":
+				l.addToken(token.AND, iden, "null")
+			case "class":
+				l.addToken(token.CLASS, iden, "null")
+			case "else":
+				l.addToken(token.ELSE, iden, "null")
+			case "false":
+				l.addToken(token.FALSE, iden, "null")
+			case "for":
+				l.addToken(token.FOR, iden, "null")
+			case "fun":
+				l.addToken(token.FUN, iden, "null")
+			case "if":
+				l.addToken(token.IF, iden, "null")
+			case "nil":
+				l.addToken(token.NIL, iden, "null")
+			case "or":
+				l.addToken(token.OR, iden, "null")
+			case "return":
+				l.addToken(token.RETURN, iden, "null")
+			case "super":
+				l.addToken(token.SUPER, iden, "null")
+			case "this":
+				l.addToken(token.THIS, iden, "null")
+			case "true":
+				l.addToken(token.TRUE, iden, "null")
+			case "var":
+				l.addToken(token.VAR, iden, "null")
+			case "while":
+				l.addToken(token.WHILE, iden, "null")
+			}
 			return
 		}
+
+		// add the identifier as token
 		l.addToken(token.IDENTIFIER, iden, "null")
 		return
 	}
