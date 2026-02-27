@@ -39,6 +39,18 @@ func (l *Lexer) MatchToken(nextByte byte) {
 		return
 	}
 
+	// check if the byte is a identifier
+	if utils.IsIden(l.peek()) {
+		iden, isIden := l.scanIdentifier()
+		if !isIden {
+			fmt.Printf("Unkown Identifier: %s\n", string(iden))
+			l.ExitCode = 65
+			return
+		}
+		l.addToken(token.IDENTIFIER, iden, "null")
+		return
+	}
+
 	switch currByte {
 	case ' ':
 		l.addToken(token.SPACE, utils.ToByteArr(currByte), "<SPACE>")

@@ -21,3 +21,7 @@ func ToByteArr(bs ...byte) []byte {
 func IsNum(b byte) bool {
 	return b >= '0' && b <= '9'
 }
+
+func IsIden(b byte) bool {
+	return (b >= 'a' && b <= 'Z') || (b >= 'a' && b <= 'z') || b == '_'
+}

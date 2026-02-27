@@ -47,7 +47,7 @@ func (l *Lexer) Display() {
 			continue
 		case token.CARRIAGE_RETURN:
 			continue
-		case token.STRING, token.NUMBER:
+		case token.STRING:
 			fmt.Printf("%s \"%s\" %s\n", t.Kind, t.Lex, t.Literal)
 		default:
 			fmt.Printf("%s %s %s\n", t.Kind, t.Lex, t.Literal)

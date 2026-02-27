@@ -2,7 +2,11 @@ package token
 
 type TokenKind string
 
+// keywords for the lox language
+var Keywords []string = []string{}
+
 const (
+	IDENTIFIER      TokenKind = "IDENTIFIER"
 	LEFT_PAREN      TokenKind = "LEFT_PAREN"
 	RIGHT_PAREN     TokenKind = "RIGHT_PAREN"
 	LEFT_BRACE      TokenKind = "LEFT_BRACE"
